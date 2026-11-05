@@ -1,0 +1,157 @@
+---
+import { experiencias } from '../data/perfil';
+const rotulo = { trabalho: 'Trabalho', formacao: 'Formação', extensao: 'Extensão' } as const;
+---
+
+<section id="experiencia" class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="index mono">02</span>
+      <h2>Trajetória</h2>
+    </div>
+
+    <ol class="linha">
+      {
+        experiencias.map((x, i) => (
+          <li class="item reveal" style={`--delay: ${i * 60}ms`}>
+            <div class="quando">
+              <span class="mono periodo">{x.periodo}</span>
+              <span class="mono tipo">{rotulo[x.tipo]}</span>
+            </div>
+            <div class="marco" aria-hidden="true" />
+            <div class="corpo">
+              <h3>
+                {x.titulo} <span class="lugar">· {x.lugar}</span>
+              </h3>
+              <p>{x.descricao}</p>
+              {x.destaques && (
+                <ul>
+                  {x.destaques.map((d) => <li>{d}</li>)}
+                </ul>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .linha {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .item {
+    display: grid;
+    grid-template-columns: 140px 24px minmax(0, 1fr);
+    gap: 0 24px;
+  }
+  .quando {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 2px;
+    text-align: right;
+  }
+  .periodo {
+    color: var(--fg);
+  }
+  .tipo {
+    color: var(--fg-subtle);
+    font-size: 0.75rem;
+  }
+  .marco {
+    position: relative;
+  }
+  .marco::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--line);
+  }
+  .item:last-child .marco::before {
+    bottom: auto;
+    height: 12px;
+  }
+  .marco::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 7px;
+    width: 9px;
+    height: 9px;
+    border: 1px solid var(--fg-subtle);
+    border-radius: 50%;
+    background: var(--bg);
+    transform: translateX(-50%);
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .item:first-child .marco::after {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+  .item:hover .marco::after {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 5px var(--accent-soft);
+  }
+  .corpo {
+    padding-bottom: 44px;
+  }
+  h3 {
+    font-size: 1.0625rem;
+    letter-spacing: -0.015em;
+  }
+  .lugar {
+    color: var(--fg-muted);
+    font-weight: 500;
+  }
+  .corpo p {
+    margin-top: 8px;
+    color: var(--fg-muted);
+    max-width: 62ch;
+  }
+  .corpo ul {
+    margin-top: 12px;
+    display: grid;
+    gap: 6px;
+  }
+  .corpo li {
+    position: relative;
+    padding-left: 18px;
+    color: var(--fg-muted);
+    font-size: 0.9375rem;
+  }
+  .corpo li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+  @media (max-width: 640px) {
+    .item {
+      grid-template-columns: 16px minmax(0, 1fr);
+      gap: 0 16px;
+    }
+    .quando {
+      grid-column: 2;
+      grid-row: 1;
+      flex-direction: row;
+      gap: 10px;
+      text-align: left;
+      margin-bottom: 6px;
+    }
+    .marco {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+    .corpo {
+      grid-column: 2;
+      grid-row: 2;
+    }
+  }
+</style>

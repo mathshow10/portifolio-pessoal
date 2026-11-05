@@ -1,0 +1,142 @@
+---
+import { perfil } from '../data/perfil';
+---
+
+<section id="contato" class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="index mono">04</span>
+      <h2>Contato</h2>
+    </div>
+
+    <div class="caixa reveal" data-spotlight>
+      <p class="chamada">
+        Tem um projeto, uma vaga ou uma ideia para trocar?
+        <span>Vou gostar de conversar.</span>
+      </p>
+
+      <div class="acoes">
+        {
+          perfil.email && (
+            <>
+              <a class="btn primary" href={`mailto:${perfil.email}`}>
+                Enviar e-mail
+              </a>
+              <button class="btn" type="button" data-copiar={perfil.email}>
+                <span data-rotulo>Copiar e-mail</span>
+              </button>
+            </>
+          )
+        }
+      </div>
+
+      <ul class="links">
+        {
+          perfil.links.map((l) => (
+            <li>
+              <a href={l.url} target="_blank" rel="noopener">
+                <span class="mono rede">{l.nome}</span>
+                <span class="usuario">{l.usuario}</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .caixa {
+    position: relative;
+    padding: 48px;
+    border: 1px solid var(--line);
+    border-radius: calc(var(--radius) + 4px);
+    background: var(--bg-elev);
+    overflow: hidden;
+  }
+  .caixa::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(500px circle at var(--mx, 80%) var(--my, 0%), var(--glow), transparent 60%);
+    pointer-events: none;
+  }
+  .chamada {
+    position: relative;
+    max-width: 22ch;
+    font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+  }
+  .chamada span {
+    display: block;
+    color: var(--fg-muted);
+  }
+  .acoes {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+  .acoes:empty {
+    display: none;
+  }
+  .links {
+    position: relative;
+    display: grid;
+    margin-top: 40px;
+    border-top: 1px solid var(--line);
+  }
+  .links a {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+    transition: padding 0.3s var(--ease), color 0.2s;
+  }
+  .links a:hover {
+    padding-left: 8px;
+  }
+  .rede {
+    width: 84px;
+    color: var(--fg-subtle);
+  }
+  .usuario {
+    flex: 1;
+  }
+  .links svg {
+    width: 18px;
+    height: 18px;
+    color: var(--fg-subtle);
+    transition: transform 0.3s var(--ease), color 0.2s;
+  }
+  .links a:hover svg {
+    color: var(--accent);
+    transform: translate(2px, -2px);
+  }
+  @media (max-width: 560px) {
+    .caixa {
+      padding: 28px 22px;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copiar]').forEach((b) =>
+    b.addEventListener('click', async () => {
+      const rotulo = b.querySelector('[data-rotulo]');
+      try {
+        await navigator.clipboard.writeText(b.dataset.copiar || '');
+        if (rotulo) rotulo.textContent = 'Copiado ✓';
+      } catch {
+        if (rotulo) rotulo.textContent = b.dataset.copiar || '';
+      }
+      setTimeout(() => rotulo && (rotulo.textContent = 'Copiar e-mail'), 2000);
+    }),
+  );
+</script>

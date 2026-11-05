@@ -1,0 +1,141 @@
+---
+import { url } from '../scripts/url';
+import ThemeToggle from './ThemeToggle.astro';
+
+const itens = [
+  { id: 'sobre', nome: 'Sobre' },
+  { id: 'experiencia', nome: 'Trajetória' },
+  { id: 'projetos', nome: 'Projetos' },
+  { id: 'contato', nome: 'Contato' },
+];
+---
+
+<header class="header" data-header>
+  <div class="container bar">
+    <a href={url('/')} class="marca" aria-label="Início">
+      <span class="logo" aria-hidden="true">ML</span>
+      <span class="nome">Matheus Lencione</span>
+    </a>
+    <nav aria-label="Principal">
+      <ul>
+        {
+          itens.map((i) => (
+            <li>
+              <a href={url(`/#${i.id}`)} data-nav={i.id}>
+                {i.nome}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <ThemeToggle />
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, background-color 0.3s, backdrop-filter 0.3s;
+  }
+  .header.scrolled {
+    border-color: var(--line);
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 68px;
+  }
+  .marca {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: auto;
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+  .logo {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--accent);
+    transition: transform 0.4s var(--ease);
+  }
+  .marca:hover .logo {
+    transform: rotate(-8deg);
+  }
+  nav ul {
+    display: flex;
+    gap: 4px;
+  }
+  nav a {
+    display: block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    transition: color 0.2s, background-color 0.2s;
+  }
+  nav a:hover {
+    color: var(--fg);
+  }
+  nav a.ativo {
+    color: var(--fg);
+    background: var(--accent-soft);
+  }
+  @media (max-width: 720px) {
+    .nome {
+      display: none;
+    }
+    .bar {
+      gap: 8px;
+    }
+    nav a {
+      padding: 6px 8px;
+      font-size: 0.8125rem;
+    }
+  }
+  @media (max-width: 380px) {
+    nav a {
+      padding: 6px 5px;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Destaca no menu a seção visível
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-nav]');
+  const secoes = [...links]
+    .map((a) => document.getElementById(a.dataset.nav!))
+    .filter((s): s is HTMLElement => !!s);
+  if (secoes.length && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            links.forEach((a) => a.classList.toggle('ativo', a.dataset.nav === e.target.id));
+          }
+        }
+      },
+      { rootMargin: '-45% 0px -50% 0px' },
+    );
+    secoes.forEach((s) => io.observe(s));
+  }
+</script>

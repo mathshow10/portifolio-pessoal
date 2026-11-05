@@ -1,0 +1,119 @@
+---
+import { getCollection } from 'astro:content';
+import ProjetoCard from './ProjetoCard.astro';
+
+const projetos = (await getCollection('projetos')).sort(
+  (a, b) =>
+    Number(b.data.destaque) - Number(a.data.destaque) ||
+    b.data.data.getTime() - a.data.data.getTime(),
+);
+const tags = [...new Set(projetos.flatMap((p) => p.data.tags))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+---
+
+<section id="projetos" class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="index mono">03</span>
+      <h2>Projetos</h2>
+      <span class="contagem mono" data-contagem>{projetos.length}</span>
+    </div>
+
+    {
+      tags.length > 1 && (
+        <div class="filtros reveal" role="group" aria-label="Filtrar projetos por tema">
+          <button type="button" class="filtro" aria-pressed="true" data-filtro="">
+            Todos
+          </button>
+          {tags.map((t) => (
+            <button type="button" class="filtro" aria-pressed="false" data-filtro={t}>
+              {t}
+            </button>
+          ))}
+        </div>
+      )
+    }
+
+    <div class="lista" data-lista>
+      {
+        projetos.map((p, i) => (
+          <div class="reveal" style={`--delay: ${(i % 2) * 80}ms`}>
+            <ProjetoCard projeto={p} />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .contagem {
+    margin-left: auto;
+    color: var(--fg-subtle);
+  }
+  .filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: -16px 0 32px;
+  }
+  .filtro {
+    height: 32px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--fg-muted);
+    font: inherit;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+  }
+  .filtro:hover {
+    color: var(--fg);
+    border-color: var(--line-strong);
+  }
+  .filtro[aria-pressed='true'] {
+    color: var(--bg);
+    background: var(--fg);
+    border-color: var(--fg);
+  }
+  .lista {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .lista > div {
+    display: grid;
+  }
+  .lista > div[hidden] {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    .lista {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const botoes = document.querySelectorAll<HTMLButtonElement>('[data-filtro]');
+  const itens = document.querySelectorAll<HTMLElement>('[data-lista] > div');
+  const contagem = document.querySelector<HTMLElement>('[data-contagem]');
+  botoes.forEach((b) =>
+    b.addEventListener('click', () => {
+      const f = b.dataset.filtro || '';
+      botoes.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      let n = 0;
+      itens.forEach((it) => {
+        const tags = it.querySelector<HTMLElement>('[data-tags]')?.dataset.tags?.split('|') ?? [];
+        const mostra = !f || tags.includes(f);
+        it.hidden = !mostra;
+        if (mostra) {
+          n++;
+          it.classList.add('visible');
+        }
+      });
+      if (contagem) contagem.textContent = String(n);
+    }),
+  );
+</script>

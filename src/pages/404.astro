@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../scripts/url';
+---
+
+<Base titulo="Página não encontrada · Matheus Lencione">
+  <section class="container nf">
+    <p class="mono">404</p>
+    <h1>Essa página não existe.</h1>
+    <a class="btn" href={url('/')}>Voltar para o início</a>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    display: grid;
+    justify-items: start;
+    gap: 20px;
+    padding-top: 120px;
+    padding-bottom: 160px;
+  }
+  .nf p {
+    color: var(--accent);
+  }
+  h1 {
+    font-size: clamp(2rem, 1.5rem + 2.5vw, 3.25rem);
+    letter-spacing: -0.04em;
+  }
+</style>
