@@ -2,6 +2,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { url } from '../../scripts/url';
+import { origem } from '../../scripts/origem';
 
 export async function getStaticPaths() {
   const projetos = await getCollection('projetos');
@@ -12,7 +13,8 @@ interface Props {
   projeto: CollectionEntry<'projetos'>;
 }
 const { projeto } = Astro.props;
-const { titulo, resumo, stack, tags, repositorio, demo, data, status } = projeto.data;
+const { titulo, resumo, stack, tags, repositorio, demo, data, status, disciplina, equipe } = projeto.data;
+const fonte = origem(repositorio);
 const { Content } = await render(projeto);
 const dataFmt = new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(data);
 const statusFmt = { concluido: 'Concluído', 'em-andamento': 'Em andamento', arquivado: 'Arquivado' }[status];
@@ -30,7 +32,7 @@ const statusFmt = { concluido: 'Concluído', 'em-andamento': 'Em andamento', arq
       <h1>{titulo}</h1>
       <p class="resumo">{resumo}</p>
       <div class="acoes">
-        {repositorio && <a class="btn primary" href={repositorio} target="_blank" rel="noopener">Ver código</a>}
+        {repositorio && <a class="btn primary" href={repositorio} target="_blank" rel="noopener">{fonte ? `Ver código no ${fonte}` : 'Ver código'}</a>}
         {demo && <a class="btn" href={demo} target="_blank" rel="noopener">Ver online</a>}
       </div>
     </header>
@@ -40,6 +42,13 @@ const statusFmt = { concluido: 'Concluído', 'em-andamento': 'Em andamento', arq
         <Content />
       </div>
       <aside class="ficha reveal" style="--delay: 160ms">
+        {disciplina && (
+          <div>
+            <h2 class="mono">Contexto</h2>
+            <p class="contexto">{disciplina}</p>
+            {equipe && <p class="contexto sub">{equipe}</p>}
+          </div>
+        )}
         <div>
           <h2 class="mono">Stack</h2>
           <ul>{stack.map((s) => <li class="tag">{s}</li>)}</ul>
@@ -116,6 +125,13 @@ const statusFmt = { concluido: 'Concluído', 'em-andamento': 'Em andamento', arq
     text-transform: uppercase;
     font-size: 0.6875rem;
     letter-spacing: 0.08em;
+  }
+  .contexto {
+    font-size: 0.9375rem;
+  }
+  .contexto.sub {
+    margin-top: 4px;
+    color: var(--fg-muted);
   }
   .ficha ul {
     display: flex;

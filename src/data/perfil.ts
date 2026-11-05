@@ -33,6 +33,7 @@ export const perfil = {
   email: '',
   links: [
     { nome: 'GitHub', url: 'https://github.com/mathshow10', usuario: '@mathshow10' },
+    { nome: 'GitLab', url: 'https://gitlab.com/mathshow10', usuario: '@mathshow10' },
     // { nome: 'LinkedIn', url: 'https://www.linkedin.com/in/...', usuario: 'Matheus Lencione' },
   ],
 };
@@ -90,7 +91,7 @@ export const experiencias: Experiencia[] = [
 export const habilidades = [
   {
     grupo: 'Desenvolvimento',
-    itens: ['Python', 'JavaScript', 'HTML', 'CSS', 'SQL', 'Git', 'GitHub'],
+    itens: ['Python', 'JavaScript', 'Java', 'Spring Boot', 'HTML', 'CSS', 'SQL', 'MySQL', 'Git', 'GitHub', 'GitLab'],
   },
   {
     grupo: 'IA & Automação',

@@ -2,7 +2,7 @@
 titulo: Este portfólio
 resumo: Site pessoal feito do zero, estático, rápido e com tema claro e escuro. Novos projetos entram como um arquivo Markdown.
 data: 2026-11-05
-tags: [Front-end, Web]
+tags: [Front-end]
 stack: [Astro, TypeScript, CSS, GitHub Actions]
 repositorio: https://github.com/mathshow10/portifolio-pessoal
 status: em-andamento

@@ -7,4 +7,5 @@ export default defineConfig({
   site: 'https://mathshow10.github.io',
   base: '/portifolio-pessoal',
   trailingSlash: 'ignore',
+  devToolbar: { enabled: false },
 });

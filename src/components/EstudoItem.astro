@@ -1,0 +1,128 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { url } from '../scripts/url';
+import { origem } from '../scripts/origem';
+import IconeOrigem from './IconeOrigem.astro';
+
+interface Props {
+  projeto: CollectionEntry<'projetos'>;
+}
+const { projeto } = Astro.props;
+const { titulo, resumo, stack, tags, disciplina, equipe, data, repositorio } = projeto.data;
+const fonte = origem(repositorio);
+---
+
+<li class="item" data-tags={tags.join('|')}>
+  <a href={url(`/projetos/${projeto.id}/`)} class="linha">
+    <span class="mono ano">{data.getUTCFullYear()}</span>
+    <span class="principal">
+      <span class="titulo">
+        {titulo}
+        <svg class="seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+      </span>
+      <span class="resumo">{resumo}</span>
+      <span class="mono detalhes">
+        {disciplina && <span>{disciplina}</span>}
+        {equipe && <span>{equipe}</span>}
+        <span class="stack">{stack.slice(0, 3).join(' · ')}</span>
+      </span>
+    </span>
+    {fonte && <span class="mono fonte"><IconeOrigem origem={fonte} />{fonte}</span>}
+  </a>
+</li>
+
+<style>
+  .item {
+    border-bottom: 1px solid var(--line);
+  }
+  .item[hidden] {
+    display: none;
+  }
+  .linha {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    gap: 4px 24px;
+    padding: 22px 12px;
+    margin: 0 -12px;
+    border-radius: 10px;
+    transition: background-color 0.25s;
+  }
+  .linha:hover {
+    background: var(--accent-soft);
+  }
+  .ano {
+    padding-top: 3px;
+    color: var(--fg-subtle);
+  }
+  .principal {
+    display: grid;
+    gap: 6px;
+  }
+  .titulo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .seta {
+    width: 15px;
+    height: 15px;
+    color: var(--fg-subtle);
+    transition: transform 0.35s var(--ease), color 0.2s;
+  }
+  .linha:hover .seta {
+    color: var(--accent);
+    transform: translate(2px, -2px);
+  }
+  .resumo {
+    max-width: 70ch;
+    color: var(--fg-muted);
+    font-size: 0.9375rem;
+  }
+  .detalhes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin-top: 2px;
+    color: var(--fg-subtle);
+    font-size: 0.75rem;
+  }
+  .detalhes > span + span::before {
+    content: '/';
+    margin-right: 16px;
+    opacity: 0.5;
+  }
+  .fonte {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: fit-content;
+    padding-top: 3px;
+    color: var(--fg-subtle);
+    font-size: 0.75rem;
+  }
+  @media (max-width: 640px) {
+    .linha {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .ano {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .fonte {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    .principal {
+      grid-column: 1 / -1;
+    }
+    .detalhes {
+      flex-direction: column;
+      gap: 2px;
+    }
+    .detalhes > span + span::before {
+      content: none;
+    }
+  }
+</style>

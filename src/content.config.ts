@@ -13,6 +13,12 @@ const projetos = defineCollection({
     repositorio: z.string().url().optional(),
     demo: z.string().url().optional(),
     destaque: z.boolean().default(false),
+    // 'projeto' = cartão grande; 'estudo' = lista compacta "Estudos e faculdade"
+    categoria: z.enum(['projeto', 'estudo']).default('projeto'),
+    // Ex.: 'Labs de Ferramentas Web · FEPI'
+    disciplina: z.string().optional(),
+    // Trabalho em grupo? Ex.: 'Equipe de 6 pessoas'
+    equipe: z.string().optional(),
     status: z.enum(['concluido', 'em-andamento', 'arquivado']).default('concluido'),
   }),
 });

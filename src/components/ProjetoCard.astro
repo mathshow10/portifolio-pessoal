@@ -1,12 +1,15 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { url } from '../scripts/url';
+import { origem } from '../scripts/origem';
+import IconeOrigem from './IconeOrigem.astro';
 
 interface Props {
   projeto: CollectionEntry<'projetos'>;
 }
 const { projeto } = Astro.props;
-const { titulo, resumo, tags, stack, destaque, status, data } = projeto.data;
+const { titulo, resumo, tags, stack, destaque, status, data, repositorio } = projeto.data;
+const fonte = origem(repositorio);
 const ano = data.getUTCFullYear();
 ---
 
@@ -16,6 +19,7 @@ const ano = data.getUTCFullYear();
     <span>{ano}</span>
     {status === 'em-andamento' && <span class="andamento">Em andamento</span>}
     {destaque && <span class="selo">Destaque</span>}
+    {fonte && <span class="fonte" title={`Código no ${fonte}`}><IconeOrigem origem={fonte} />{fonte}</span>}
   </div>
   <h3>
     {titulo}
@@ -77,8 +81,18 @@ const ano = data.getUTCFullYear();
     margin-right: 10px;
   }
   .selo {
-    margin-left: auto;
     color: var(--accent);
+  }
+  .selo::before {
+    content: '·';
+    margin-right: 10px;
+    color: var(--fg-subtle);
+  }
+  .fonte {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
   }
   h3 {
     display: flex;

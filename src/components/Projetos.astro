@@ -1,13 +1,16 @@
 ---
 import { getCollection } from 'astro:content';
 import ProjetoCard from './ProjetoCard.astro';
+import EstudoItem from './EstudoItem.astro';
 
-const projetos = (await getCollection('projetos')).sort(
+const todos = (await getCollection('projetos')).sort(
   (a, b) =>
     Number(b.data.destaque) - Number(a.data.destaque) ||
     b.data.data.getTime() - a.data.data.getTime(),
 );
-const tags = [...new Set(projetos.flatMap((p) => p.data.tags))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+const projetos = todos.filter((p) => p.data.categoria === 'projeto');
+const estudos = todos.filter((p) => p.data.categoria === 'estudo');
+const tags = [...new Set(todos.flatMap((p) => p.data.tags))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
 ---
 
 <section id="projetos" class="section">
@@ -15,12 +18,12 @@ const tags = [...new Set(projetos.flatMap((p) => p.data.tags))].sort((a, b) => a
     <div class="section-head reveal">
       <span class="index mono">03</span>
       <h2>Projetos</h2>
-      <span class="contagem mono" data-contagem>{projetos.length}</span>
+      <span class="contagem mono" data-contagem>{todos.length}</span>
     </div>
 
     {
       tags.length > 1 && (
-        <div class="filtros reveal" role="group" aria-label="Filtrar projetos por tema">
+        <div class="filtros reveal" role="group" aria-label="Filtrar projetos por área">
           <button type="button" class="filtro" aria-pressed="true" data-filtro="">
             Todos
           </button>
@@ -33,15 +36,33 @@ const tags = [...new Set(projetos.flatMap((p) => p.data.tags))].sort((a, b) => a
       )
     }
 
-    <div class="lista" data-lista>
+    <div class="lista" data-grupo>
       {
         projetos.map((p, i) => (
-          <div class="reveal" style={`--delay: ${(i % 2) * 80}ms`}>
+          <div class="reveal" style={`--delay: ${(i % 2) * 80}ms`} data-item>
             <ProjetoCard projeto={p} />
           </div>
         ))
       }
     </div>
+
+    {
+      estudos.length > 0 && (
+        <div class="estudos" data-grupo>
+          <div class="estudos-head reveal">
+            <h3>Estudos e faculdade</h3>
+            <p>Trabalhos menores, feitos para aprender: disciplinas da FEPI e projetos de extensão.</p>
+          </div>
+          <ul class="reveal">
+            {estudos.map((p) => (
+              <EstudoItem projeto={p} />
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
+    <p class="vazio" data-vazio hidden>Nenhum projeto nessa área ainda.</p>
   </div>
 </section>
 
@@ -85,35 +106,69 @@ const tags = [...new Set(projetos.flatMap((p) => p.data.tags))].sort((a, b) => a
   .lista > div {
     display: grid;
   }
+  [data-grupo][hidden],
   .lista > div[hidden] {
     display: none;
+  }
+  .estudos {
+    margin-top: 64px;
+  }
+  .estudos-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .estudos-head h3 {
+    font-size: 1.125rem;
+    letter-spacing: -0.02em;
+  }
+  .estudos-head p {
+    color: var(--fg-subtle);
+    font-size: 0.875rem;
+  }
+  .vazio {
+    padding: 32px 0;
+    color: var(--fg-subtle);
   }
   @media (max-width: 760px) {
     .lista {
       grid-template-columns: 1fr;
+    }
+    .estudos {
+      margin-top: 48px;
     }
   }
 </style>
 
 <script>
   const botoes = document.querySelectorAll<HTMLButtonElement>('[data-filtro]');
-  const itens = document.querySelectorAll<HTMLElement>('[data-lista] > div');
+  const grupos = document.querySelectorAll<HTMLElement>('[data-grupo]');
   const contagem = document.querySelector<HTMLElement>('[data-contagem]');
+  const vazio = document.querySelector<HTMLElement>('[data-vazio]');
+
   botoes.forEach((b) =>
     b.addEventListener('click', () => {
       const f = b.dataset.filtro || '';
       botoes.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-      let n = 0;
-      itens.forEach((it) => {
-        const tags = it.querySelector<HTMLElement>('[data-tags]')?.dataset.tags?.split('|') ?? [];
-        const mostra = !f || tags.includes(f);
-        it.hidden = !mostra;
-        if (mostra) {
-          n++;
-          it.classList.add('visible');
-        }
+      let total = 0;
+      grupos.forEach((g) => {
+        let n = 0;
+        g.querySelectorAll<HTMLElement>('[data-item], li[data-tags]').forEach((it) => {
+          const el = it.matches('[data-tags]') ? it : it.querySelector<HTMLElement>('[data-tags]');
+          const tags = el?.dataset.tags?.split('|') ?? [];
+          const mostra = !f || tags.includes(f);
+          it.hidden = !mostra;
+          if (mostra) n++;
+        });
+        g.hidden = n === 0;
+        g.querySelectorAll('.reveal').forEach((r) => r.classList.add('visible'));
+        total += n;
       });
-      if (contagem) contagem.textContent = String(n);
+      if (contagem) contagem.textContent = String(total);
+      if (vazio) vazio.hidden = total > 0;
     }),
   );
 </script>

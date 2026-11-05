@@ -41,6 +41,9 @@ repositorio: https://github.com/mathshow10/meu-projeto
 demo: https://meu-projeto.exemplo.com   # opcional
 destaque: false                          # true = aparece primeiro
 status: concluido                        # concluido | em-andamento | arquivado
+categoria: projeto                       # projeto = cartão grande | estudo = lista "Estudos e faculdade"
+disciplina: Nome da matéria · FEPI       # opcional, aparece em estudos
+equipe: Equipe de 4 pessoas              # opcional, para trabalhos em grupo
 ---
 
 ## O problema
@@ -50,7 +53,9 @@ status: concluido                        # concluido | em-andamento | arquivado
 ...
 ```
 
-O cartão na página inicial, o filtro por tema e a página `/projetos/meu-projeto/` são gerados sozinhos.
+O link pode ser do GitHub ou do GitLab: o site mostra o selo certo sozinho.
+
+O cartão (ou a linha, se for `estudo`) na página inicial, o filtro por tema e a página `/projetos/meu-projeto/` são gerados sozinhos.
 
 ## Publicação
 

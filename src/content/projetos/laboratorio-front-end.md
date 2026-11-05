@@ -2,7 +2,9 @@
 titulo: Laboratório de Front-End
 resumo: Práticas e laboratórios da disciplina de Programação Front-End do TADS, da estrutura em HTML ao layout responsivo com Flexbox, Grid e media queries.
 data: 2026-03-03
-tags: [Front-end, Estudos]
+tags: [Front-end]
+categoria: estudo
+disciplina: Programação Front-End · FEPI
 stack: [HTML5, CSS3, Git]
 repositorio: https://github.com/mathshow10/Laboratorio-das-aulas-de-Front-End-TADS
 status: em-andamento

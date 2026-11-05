@@ -2,7 +2,7 @@
 titulo: Painel de Suporte
 resumo: Ferramenta para Windows que acelera o atendimento de tickets. Um atalho digitado em qualquer caixa de texto vira a resposta pronta, e uma IA ajuda a achar, melhorar e resumir respostas.
 data: 2026-11-05
-tags: [Automação, IA, Python]
+tags: [Automação, IA]
 stack: [Python, Tkinter, Google Gemini API, keyboard, pystray]
 repositorio: https://github.com/mathshow10/painel-suporte
 destaque: true
