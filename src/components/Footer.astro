@@ -1,20 +1,24 @@
 ---
 import { perfil } from '../data/perfil';
+import { url } from '../scripts/url';
 const ano = new Date().getFullYear();
 ---
 
 <footer class="footer">
   <div class="container linha">
-    <p>© {ano} {perfil.nome}</p>
-    <p class="mono">Feito com Astro · <a class="link" href="https://github.com/mathshow10/portifolio-pessoal" target="_blank" rel="noopener">código-fonte</a></p>
+    <p>© {ano} {perfil.nome} · Feito com Astro e publicado no GitHub Pages.</p>
+    <p class="mono maquina">
+      <span>Versão para IA</span>
+      <a href={url('/cv.md')}>cv.md</a>
+    </p>
   </div>
 </footer>
 
 <style>
   .footer {
     border-top: 1px solid var(--line);
-    padding: 32px 0 40px;
-    color: var(--fg-subtle);
+    padding-block: 32px;
+    color: var(--subtle);
     font-size: 0.875rem;
   }
   .linha {
@@ -23,7 +27,19 @@ const ano = new Date().getFullYear();
     justify-content: space-between;
     gap: 8px 24px;
   }
-  .footer a {
-    color: var(--fg-muted);
+  .maquina {
+    display: flex;
+    gap: 12px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .maquina a {
+    color: var(--muted);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .maquina a:hover {
+    color: var(--ink);
   }
 </style>

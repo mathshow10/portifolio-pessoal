@@ -1,0 +1,109 @@
+---
+import { getCollection } from 'astro:content';
+import { experiencias } from '../data/perfil';
+
+const projetos = new Map((await getCollection('projetos')).map((p) => [p.id, p.data.titulo]));
+---
+
+<section id="experiencia" class="section">
+  <div class="container">
+    <header class="section-head reveal">
+      <p class="eyebrow">Experiência</p>
+      <h2 class="display">Por onde passei</h2>
+    </header>
+
+    <ol class="lista">
+      {
+        experiencias.map((e) => (
+          <li class="linha reveal">
+            <div class="quando mono">
+              <span>{e.periodo}</span>
+              {e.detalhe && <span class="detalhe">{e.detalhe}</span>}
+            </div>
+            <div class="corpo">
+              <h3>
+                {e.cargo} <span class="lugar">· {e.lugar}</span>
+              </h3>
+              <p>{e.descricao}</p>
+              {e.projetos && (
+                <ul class="links">
+                  {e.projetos
+                    .filter((id) => projetos.has(id))
+                    .map((id) => (
+                      <li>
+                        <a href={`#projeto-${id}`}>{projetos.get(id)}</a>
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .lista {
+    border-top: 1px solid var(--line);
+  }
+  .linha {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 8px 32px;
+    padding-block: 32px;
+    border-bottom: 1px solid var(--line);
+  }
+  .quando {
+    display: grid;
+    align-content: start;
+    gap: 2px;
+    padding-top: 3px;
+  }
+  .detalhe {
+    color: var(--subtle);
+    font-size: 0.75rem;
+  }
+  .corpo {
+    display: grid;
+    gap: 10px;
+    max-width: 66ch;
+  }
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .lugar {
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .corpo p {
+    color: var(--muted);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    margin-top: 4px;
+  }
+  .links a {
+    color: var(--accent);
+    font-size: 0.9375rem;
+  }
+  .links a::before {
+    content: '→';
+    margin-right: 6px;
+  }
+  .links a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  @media (max-width: 680px) {
+    .linha {
+      grid-template-columns: 1fr;
+      padding-block: 24px;
+    }
+  }
+</style>

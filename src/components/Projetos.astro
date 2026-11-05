@@ -1,174 +1,251 @@
 ---
 import { getCollection } from 'astro:content';
-import ProjetoCard from './ProjetoCard.astro';
-import EstudoItem from './EstudoItem.astro';
+import Icone from './Icone.astro';
 
-const todos = (await getCollection('projetos')).sort(
-  (a, b) =>
-    Number(b.data.destaque) - Number(a.data.destaque) ||
-    b.data.data.getTime() - a.data.data.getTime(),
-);
-const projetos = todos.filter((p) => p.data.categoria === 'projeto');
-const estudos = todos.filter((p) => p.data.categoria === 'estudo');
-const tags = [...new Set(todos.flatMap((p) => p.data.tags))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+const todos = await getCollection('projetos');
+const ordenar = (a: (typeof todos)[number], b: (typeof todos)[number]) => a.data.ordem - b.data.ordem;
+const principais = todos.filter((p) => p.data.categoria === 'principal').sort(ordenar);
+const outros = todos.filter((p) => p.data.categoria === 'outro').sort(ordenar);
+const origem = (u?: string) => (!u ? '' : u.includes('gitlab.com') ? 'GitLab' : u.includes('github.com') ? 'GitHub' : 'Código');
 ---
 
 <section id="projetos" class="section">
   <div class="container">
-    <div class="section-head reveal">
-      <span class="index mono">03</span>
-      <h2>Projetos</h2>
-      <span class="contagem mono" data-contagem>{todos.length}</span>
-    </div>
+    <header class="section-head reveal">
+      <p class="eyebrow">Projetos</p>
+      <h2 class="display">O que eu construí</h2>
+      <p>Os projetos de que mais me orgulho e o que cada um resolve.</p>
+    </header>
 
-    {
-      tags.length > 1 && (
-        <div class="filtros reveal" role="group" aria-label="Filtrar projetos por área">
-          <button type="button" class="filtro" aria-pressed="true" data-filtro="">
-            Todos
-          </button>
-          {tags.map((t) => (
-            <button type="button" class="filtro" aria-pressed="false" data-filtro={t}>
-              {t}
-            </button>
-          ))}
-        </div>
-      )
-    }
-
-    <div class="lista" data-grupo>
+    <div class="principais">
       {
-        projetos.map((p, i) => (
-          <div class="reveal" style={`--delay: ${(i % 2) * 80}ms`} data-item>
-            <ProjetoCard projeto={p} />
-          </div>
+        principais.map((p, i) => (
+          <article class="card reveal" id={`projeto-${p.id}`}>
+            <div class="meta mono">
+              <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              {p.data.contexto && <span>{p.data.contexto}</span>}
+            </div>
+            <h3>{p.data.titulo}</h3>
+            <blockquote>{p.data.frase}</blockquote>
+            {p.data.destaques.length > 0 && (
+              <ul class="topicos">
+                {p.data.destaques.map((d) => <li>{d}</li>)}
+              </ul>
+            )}
+            <div class="rodape">
+              <ul class="chips">
+                {p.data.stack.map((s) => <li class="chip">{s}</li>)}
+              </ul>
+              {p.data.repositorio && (
+                <a class="repo mono" href={p.data.repositorio} target="_blank" rel="noopener">
+                  Ver no {origem(p.data.repositorio)} <Icone nome="seta" />
+                </a>
+              )}
+            </div>
+          </article>
         ))
       }
     </div>
 
     {
-      estudos.length > 0 && (
-        <div class="estudos" data-grupo>
-          <div class="estudos-head reveal">
-            <h3>Estudos e faculdade</h3>
-            <p>Trabalhos menores, feitos para aprender: disciplinas da FEPI e projetos de extensão.</p>
-          </div>
-          <ul class="reveal">
-            {estudos.map((p) => (
-              <EstudoItem projeto={p} />
+      outros.length > 0 && (
+        <div class="outros">
+          <header class="sub reveal">
+            <p class="eyebrow">Estudos e laboratórios</p>
+            <h3 class="display">Outros projetos</h3>
+          </header>
+          <div class="grade">
+            {outros.map((p) => (
+              <a class="mini reveal" id={`projeto-${p.id}`} href={p.data.repositorio ?? p.data.demo ?? '#'} target="_blank" rel="noopener">
+                <div class="mini-topo">
+                  <h4>{p.data.titulo}</h4>
+                  <Icone nome="seta" />
+                </div>
+                {p.data.contexto && <p class="mono ctx">{p.data.contexto}</p>}
+                <p class="desc">{p.data.frase}</p>
+                <p class="mono stack">{p.data.stack.join(' · ')}</p>
+              </a>
             ))}
-          </ul>
+          </div>
         </div>
       )
     }
-
-    <p class="vazio" data-vazio hidden>Nenhum projeto nessa área ainda.</p>
   </div>
 </section>
 
 <style>
-  .contagem {
-    margin-left: auto;
-    color: var(--fg-subtle);
-  }
-  .filtros {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: -16px 0 32px;
-  }
-  .filtro {
-    height: 32px;
-    padding: 0 14px;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--fg-muted);
-    font: inherit;
-    font-size: 0.8125rem;
-    cursor: pointer;
-    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
-  }
-  .filtro:hover {
-    color: var(--fg);
-    border-color: var(--line-strong);
-  }
-  .filtro[aria-pressed='true'] {
-    color: var(--bg);
-    background: var(--fg);
-    border-color: var(--fg);
-  }
-  .lista {
+  .principais {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
   }
-  .lista > div {
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 32px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    scroll-margin-top: calc(var(--header-h) + 24px);
+  }
+  .card:target {
+    border-color: var(--accent);
+  }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    color: var(--subtle);
+    font-size: 0.75rem;
+  }
+  .num {
+    color: var(--accent);
+  }
+  h3 {
+    font-size: 1.3125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+  blockquote {
+    padding-left: 16px;
+    border-left: 2px solid var(--accent);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    line-height: 1.4;
+    letter-spacing: -0.005em;
+  }
+  .topicos {
     display: grid;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 0.9375rem;
   }
-  [data-grupo][hidden],
-  .lista > div[hidden] {
-    display: none;
+  .topicos li {
+    position: relative;
+    padding-left: 16px;
   }
-  .estudos {
-    margin-top: 64px;
+  .topicos li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.7em;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--subtle);
   }
-  .estudos-head {
+  .rodape {
+    display: grid;
+    gap: 16px;
+    margin-top: auto;
+    padding-top: 8px;
+  }
+  .chips {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
-    gap: 4px 16px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--line);
+    gap: 6px;
   }
-  .estudos-head h3 {
-    font-size: 1.125rem;
+  .repo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    color: var(--accent);
+    font-size: 0.8125rem;
+  }
+  .repo:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .repo :global(svg),
+  .mini-topo :global(svg) {
+    width: 14px;
+    height: 14px;
+  }
+
+  .outros {
+    margin-top: 88px;
+  }
+  .sub {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .sub h3 {
+    font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+    font-weight: 400;
     letter-spacing: -0.02em;
   }
-  .estudos-head p {
-    color: var(--fg-subtle);
-    font-size: 0.875rem;
+  .grade {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
   }
-  .vazio {
-    padding: 32px 0;
-    color: var(--fg-subtle);
+  .mini {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    transition: border-color 0.2s, background-color 0.2s;
   }
-  @media (max-width: 760px) {
-    .lista {
+  .mini:hover {
+    border-color: var(--line-strong);
+    background: var(--surface);
+  }
+  .mini-topo {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .mini-topo :global(svg) {
+    color: var(--subtle);
+    flex-shrink: 0;
+    transition: color 0.2s, transform 0.3s var(--ease);
+  }
+  .mini:hover .mini-topo :global(svg) {
+    color: var(--accent);
+    transform: translate(2px, -2px);
+  }
+  h4 {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .ctx {
+    color: var(--accent);
+    font-size: 0.75rem;
+  }
+  .desc {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+  .stack {
+    margin-top: auto;
+    padding-top: 6px;
+    color: var(--subtle);
+    font-size: 0.75rem;
+  }
+  @media (max-width: 860px) {
+    .principais,
+    .grade {
       grid-template-columns: 1fr;
     }
-    .estudos {
-      margin-top: 48px;
+  }
+  @media (max-width: 560px) {
+    .card {
+      padding: 24px 20px;
+    }
+    .meta {
+      flex-direction: column;
+      gap: 4px;
+    }
+    .outros {
+      margin-top: 64px;
     }
   }
 </style>
-
-<script>
-  const botoes = document.querySelectorAll<HTMLButtonElement>('[data-filtro]');
-  const grupos = document.querySelectorAll<HTMLElement>('[data-grupo]');
-  const contagem = document.querySelector<HTMLElement>('[data-contagem]');
-  const vazio = document.querySelector<HTMLElement>('[data-vazio]');
-
-  botoes.forEach((b) =>
-    b.addEventListener('click', () => {
-      const f = b.dataset.filtro || '';
-      botoes.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-      let total = 0;
-      grupos.forEach((g) => {
-        let n = 0;
-        g.querySelectorAll<HTMLElement>('[data-item], li[data-tags]').forEach((it) => {
-          const el = it.matches('[data-tags]') ? it : it.querySelector<HTMLElement>('[data-tags]');
-          const tags = el?.dataset.tags?.split('|') ?? [];
-          const mostra = !f || tags.includes(f);
-          it.hidden = !mostra;
-          if (mostra) n++;
-        });
-        g.hidden = n === 0;
-        g.querySelectorAll('.reveal').forEach((r) => r.classList.add('visible'));
-        total += n;
-      });
-      if (contagem) contagem.textContent = String(total);
-      if (vazio) vazio.hidden = total > 0;
-    }),
-  );
-</script>

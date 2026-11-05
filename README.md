@@ -20,11 +20,14 @@ Abra http://localhost:4321/portifolio-pessoal/
 
 | O quê | Onde |
 |---|---|
-| Nome, frase, resumo, texto "Sobre", idiomas, e-mail e links | `src/data/perfil.ts` |
-| Trajetória (trabalho, formação, extensão) | `src/data/perfil.ts` → `experiencias` |
+| Nome, título, apresentação, fatos, foto, e-mail e links | `src/data/perfil.ts` → `perfil` |
+| Experiência | `src/data/perfil.ts` → `experiencias` |
 | Habilidades | `src/data/perfil.ts` → `habilidades` |
+| Formação, destaques e idiomas | `src/data/perfil.ts` → `formacao`, `destaques`, `idiomas` |
 | Projetos | `src/content/projetos/*.md` |
 | Cores e fontes | `src/styles/global.css` (variáveis no topo) |
+
+O currículo em Markdown (`/cv.md`) e o bloco "Para recrutadores" são gerados a partir desses mesmos dados.
 
 ## Adicionando um projeto novo
 
@@ -33,29 +36,19 @@ Crie um arquivo em `src/content/projetos/`, por exemplo `meu-projeto.md`:
 ```md
 ---
 titulo: Meu Projeto
-resumo: Uma ou duas frases sobre o que ele faz.
-data: 2026-12-01
-tags: [Web, IA]
+categoria: principal              # principal = cartão grande | outro = "Outros projetos"
+ordem: 3                          # menor aparece primeiro
+contexto: FEPI · Nome da matéria  # texto pequeno no canto do cartão
+frase: Uma ou duas frases sobre o que ele resolve.
+destaques:                        # só aparecem nos cartões principais
+  - O que você fez, com resultado.
+  - Outra coisa importante.
 stack: [Python, FastAPI]
-repositorio: https://github.com/mathshow10/meu-projeto
-demo: https://meu-projeto.exemplo.com   # opcional
-destaque: false                          # true = aparece primeiro
-status: concluido                        # concluido | em-andamento | arquivado
-categoria: projeto                       # projeto = cartão grande | estudo = lista "Estudos e faculdade"
-disciplina: Nome da matéria · FEPI       # opcional, aparece em estudos
-equipe: Equipe de 4 pessoas              # opcional, para trabalhos em grupo
+repositorio: https://gitlab.com/mathshow10/meu-projeto   # GitHub ou GitLab
 ---
-
-## O problema
-...
-
-## A solução
-...
 ```
 
-O link pode ser do GitHub ou do GitLab: o site mostra o selo certo sozinho.
-
-O cartão (ou a linha, se for `estudo`) na página inicial, o filtro por tema e a página `/projetos/meu-projeto/` são gerados sozinhos.
+Para ligar o projeto a uma experiência, coloque o nome do arquivo (sem `.md`) em `projetos` dentro de `experiencias`.
 
 ## Publicação
 

@@ -1,35 +1,30 @@
 ---
+import { perfil } from '../data/perfil';
 import { url } from '../scripts/url';
 import ThemeToggle from './ThemeToggle.astro';
 
 const itens = [
-  { id: 'sobre', nome: 'Sobre' },
-  { id: 'experiencia', nome: 'Trajetória' },
   { id: 'projetos', nome: 'Projetos' },
+  { id: 'experiencia', nome: 'Experiência' },
+  { id: 'habilidades', nome: 'Habilidades' },
   { id: 'contato', nome: 'Contato' },
 ];
 ---
 
-<header class="header" data-header>
+<header class="header">
   <div class="container bar">
-    <a href={url('/')} class="marca" aria-label="Início">
-      <span class="logo" aria-hidden="true">ML</span>
-      <span class="nome">Matheus Lencione</span>
+    <a href={url('/')} class="marca">
+      <span class="logo" aria-hidden="true">M</span>
+      <span>{perfil.nome}</span>
     </a>
     <nav aria-label="Principal">
       <ul>
-        {
-          itens.map((i) => (
-            <li>
-              <a href={url(`/#${i.id}`)} data-nav={i.id}>
-                {i.nome}
-              </a>
-            </li>
-          ))
-        }
+        {itens.map((i) => <li><a href={url(`/#${i.id}`)} data-nav={i.id}>{i.nome}</a></li>)}
       </ul>
     </nav>
-    <ThemeToggle />
+    <div class="acoes">
+      <ThemeToggle />
+    </div>
   </div>
 </header>
 
@@ -38,89 +33,66 @@ const itens = [
     position: sticky;
     top: 0;
     z-index: 50;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.3s, background-color 0.3s, backdrop-filter 0.3s;
-  }
-  .header.scrolled {
-    border-color: var(--line);
-    background: color-mix(in srgb, var(--bg) 78%, transparent);
-    backdrop-filter: saturate(160%) blur(14px);
-    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: saturate(160%) blur(12px);
+    -webkit-backdrop-filter: saturate(160%) blur(12px);
   }
   .bar {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    gap: 24px;
-    height: 68px;
+    height: var(--header-h);
   }
   .marca {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-right: auto;
     font-weight: 600;
     font-size: 0.9375rem;
+    letter-spacing: -0.01em;
   }
   .logo {
     display: grid;
     place-items: center;
-    width: 30px;
-    height: 30px;
-    border: 1px solid var(--line-strong);
-    border-radius: 8px;
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    color: var(--accent);
-    transition: transform 0.4s var(--ease);
-  }
-  .marca:hover .logo {
-    transform: rotate(-8deg);
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    background: var(--accent);
+    color: var(--surface);
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1;
   }
   nav ul {
     display: flex;
-    gap: 4px;
+    gap: 28px;
   }
   nav a {
-    display: block;
-    padding: 6px 12px;
-    border-radius: 999px;
-    color: var(--fg-muted);
-    font-size: 0.875rem;
-    transition: color 0.2s, background-color 0.2s;
+    color: var(--muted);
+    font-size: 0.9375rem;
+    transition: color 0.2s;
   }
-  nav a:hover {
-    color: var(--fg);
-  }
+  nav a:hover,
   nav a.ativo {
-    color: var(--fg);
-    background: var(--accent-soft);
+    color: var(--ink);
   }
-  @media (max-width: 720px) {
-    .nome {
-      display: none;
-    }
+  .acoes {
+    display: flex;
+    justify-content: flex-end;
+  }
+  @media (max-width: 760px) {
     .bar {
-      gap: 8px;
+      grid-template-columns: 1fr auto;
     }
-    nav a {
-      padding: 6px 8px;
-      font-size: 0.8125rem;
-    }
-  }
-  @media (max-width: 380px) {
-    nav a {
-      padding: 6px 5px;
+    nav {
+      display: none;
     }
   }
 </style>
 
 <script>
-  const header = document.querySelector<HTMLElement>('[data-header]');
-  const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 8);
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
-
-  // Destaca no menu a seção visível
   const links = document.querySelectorAll<HTMLAnchorElement>('[data-nav]');
   const secoes = [...links]
     .map((a) => document.getElementById(a.dataset.nav!))
@@ -129,12 +101,10 @@ const itens = [
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
-          if (e.isIntersecting) {
-            links.forEach((a) => a.classList.toggle('ativo', a.dataset.nav === e.target.id));
-          }
+          if (e.isIntersecting) links.forEach((a) => a.classList.toggle('ativo', a.dataset.nav === e.target.id));
         }
       },
-      { rootMargin: '-45% 0px -50% 0px' },
+      { rootMargin: '-40% 0px -55% 0px' },
     );
     secoes.forEach((s) => io.observe(s));
   }

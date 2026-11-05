@@ -1,0 +1,101 @@
+---
+import { gerarCV } from '../scripts/cv';
+import { url } from '../scripts/url';
+import Icone from './Icone.astro';
+
+const base = new URL(import.meta.env.BASE_URL, Astro.site);
+const cv = await gerarCV(base);
+const pedido = `Abaixo está o currículo de Matheus Lencione. Leia com atenção. Em seguida vou colar a descrição de uma vaga: diga, de forma honesta e objetiva, onde ele se encaixa, onde ainda falta experiência e que perguntas valeria fazer numa entrevista.\n\n${cv}`;
+const claude = `https://claude.ai/new?q=${encodeURIComponent(pedido)}`;
+const chatgpt = `https://chatgpt.com/?q=${encodeURIComponent(pedido)}`;
+---
+
+<section class="container recrutadores">
+  <div class="caixa">
+    <div class="texto">
+      <p class="eyebrow">Para recrutadores</p>
+      <h2 class="display">Pergunte a uma IA sobre mim</h2>
+      <p>Abra meu currículo no Claude ou no ChatGPT com um pedido já escrito e depois cole a descrição da vaga para ver se eu combino com ela.</p>
+      <a class="mono arquivo" href={url('/cv.md')}>/cv.md</a>
+    </div>
+    <div class="botoes">
+      <button class="btn primary" type="button" data-copiar-cv>
+        <Icone nome="copiar" /><span data-rotulo>Copiar em Markdown</span>
+      </button>
+      <a class="btn" href={claude} target="_blank" rel="noopener">Perguntar ao Claude <Icone nome="seta" /></a>
+      <a class="btn" href={chatgpt} target="_blank" rel="noopener">Perguntar ao ChatGPT <Icone nome="seta" /></a>
+    </div>
+    <script type="text/markdown" id="cv-md" set:html={cv.replace(/</g, '\\u003c')} />
+  </div>
+</section>
+
+<style>
+  .recrutadores {
+    padding-bottom: 104px;
+    border-bottom: 1px solid var(--line);
+  }
+  @media (max-width: 640px) {
+    .recrutadores {
+      padding-bottom: 72px;
+    }
+  }
+  .caixa {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 32px 48px;
+    padding: 36px;
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--surface) 55%, transparent);
+  }
+  .texto {
+    display: grid;
+    gap: 10px;
+  }
+  h2 {
+    font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+  }
+  .texto p:not(.eyebrow) {
+    max-width: 58ch;
+    color: var(--muted);
+  }
+  .arquivo {
+    width: fit-content;
+    color: var(--subtle);
+    font-size: 0.75rem;
+  }
+  .arquivo:hover {
+    color: var(--ink);
+  }
+  .botoes {
+    display: grid;
+    gap: 8px;
+    min-width: 220px;
+  }
+  @media (max-width: 760px) {
+    .caixa {
+      grid-template-columns: 1fr;
+      padding: 28px 22px;
+    }
+    .botoes {
+      min-width: 0;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copiar-cv]').forEach((b) =>
+    b.addEventListener('click', async () => {
+      const texto = (document.getElementById('cv-md')?.textContent || '').replace(/\\u003c/g, '<');
+      const rotulo = b.querySelector('[data-rotulo]');
+      try {
+        await navigator.clipboard.writeText(texto);
+        if (rotulo) rotulo.textContent = 'Copiado';
+      } catch {
+        if (rotulo) rotulo.textContent = 'Não foi possível copiar';
+      }
+      setTimeout(() => rotulo && (rotulo.textContent = 'Copiar em Markdown'), 2000);
+    }),
+  );
+</script>

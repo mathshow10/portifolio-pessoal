@@ -1,0 +1,201 @@
+---
+import { perfil } from '../data/perfil';
+import { url } from '../scripts/url';
+import Icone from './Icone.astro';
+
+const iniciais = perfil.nome.split(' ').map((p) => p[0]).slice(0, 2).join('');
+const icone = (n: string) => n.toLowerCase() as 'github' | 'gitlab' | 'linkedin';
+---
+
+<section class="topo">
+  <div class="container">
+    <div class="identidade">
+      <div class="pessoa">
+        {
+          perfil.foto ? (
+            <img class="avatar" src={url(`/${perfil.foto}`)} alt={`Foto de ${perfil.nome}`} width="64" height="64" />
+          ) : (
+            <span class="avatar iniciais" aria-hidden="true">{iniciais}</span>
+          )
+        }
+        <div>
+          <p class="nome">{perfil.nome}</p>
+          <p class="cargo">{perfil.cargo}</p>
+        </div>
+      </div>
+      <p class="atual">
+        <span class="ponto" aria-hidden="true"></span>
+        Atualmente na <strong>{perfil.empresaAtual}</strong>
+      </p>
+    </div>
+
+    <h1 class="display">
+      {perfil.titulo} <em>{perfil.tituloDestaque}</em>
+    </h1>
+
+    <p class="apresentacao">{perfil.apresentacao}</p>
+
+    <div class="botoes">
+      {
+        perfil.email ? (
+          <a class="btn primary" href={`mailto:${perfil.email}`}><Icone nome="email" />Enviar e-mail</a>
+        ) : (
+          <a class="btn primary" href="#projetos"><Icone nome="baixo" />Ver projetos</a>
+        )
+      }
+      {perfil.links.map((l) => (
+        <a class="btn" href={l.url} target="_blank" rel="noopener"><Icone nome={icone(l.nome)} />{l.nome}</a>
+      ))}
+    </div>
+
+    <dl class="fatos">
+      {perfil.fatos.map((f) => (
+        <div>
+          <dt class="eyebrow">{f.rotulo}</dt>
+          <dd>{f.valor}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .topo {
+    padding-block: 80px 72px;
+  }
+  .identidade {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .pessoa {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .iniciais {
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-style: italic;
+  }
+  .nome {
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .cargo {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+  .atual {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 32px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+  .atual strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .ponto {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ok);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 18%, transparent);
+  }
+  h1 {
+    max-width: 17ch;
+    margin-top: 64px;
+    font-size: clamp(2.6rem, 1.4rem + 4.6vw, 4.6rem);
+  }
+  h1 em {
+    color: var(--accent);
+    font-style: italic;
+  }
+  .apresentacao {
+    max-width: 66ch;
+    margin-top: 32px;
+    color: var(--muted);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+  .botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 36px;
+  }
+  .fatos {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 64px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .fatos > div {
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    padding: 20px 22px;
+    min-width: 0;
+  }
+  .fatos > div + div {
+    border-left: 1px solid var(--line);
+  }
+  .fatos dt {
+    color: var(--subtle);
+    font-size: 0.6875rem;
+  }
+  .fatos dd {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  @media (max-width: 860px) {
+    .fatos {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .fatos > div:nth-child(3) {
+      border-left: 0;
+    }
+    .fatos > div:nth-child(n + 3) {
+      border-top: 1px solid var(--line);
+    }
+  }
+  @media (max-width: 560px) {
+    .topo {
+      padding-block: 48px 56px;
+    }
+    h1 {
+      margin-top: 44px;
+    }
+    .fatos {
+      grid-template-columns: 1fr;
+    }
+    .fatos > div + div {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+  }
+</style>

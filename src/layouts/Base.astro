@@ -11,34 +11,38 @@ interface Props {
 }
 
 const {
-  titulo = `${perfil.nome} · ${perfil.cargo}`,
-  descricao = perfil.resumo,
+  titulo = `${perfil.nome} · Desenvolvedor Full Stack`,
+  descricao = perfil.apresentacao.split('. ').slice(0, 2).join('. ') + '.',
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="pt-BR" class="no-js">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{titulo}</title>
     <meta name="description" content={descricao} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
-    <meta name="theme-color" content="#0c0c0e" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)" />
-    <meta property="og:type" content="website" />
+    <link rel="alternate" type="text/markdown" href={url('/cv.md')} title="Currículo em Markdown" />
+    <meta name="theme-color" content="#0d0f13" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f3f4f6" media="(prefers-color-scheme: light)" />
+    <meta property="og:type" content="profile" />
     <meta property="og:title" content={titulo} />
     <meta property="og:description" content={descricao} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="pt_BR" />
     <script is:inline>
-      document.documentElement.classList.remove('no-js');
-      try {
-        const t = localStorage.getItem('tema');
-        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
-      } catch (e) {}
+      (function () {
+        var r = document.documentElement;
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) r.classList.add('js');
+        try {
+          var t = localStorage.getItem('tema');
+          if (t === 'light' || t === 'dark') r.dataset.theme = t;
+        } catch (e) {}
+      })();
     </script>
   </head>
   <body>
@@ -50,7 +54,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <Footer />
 
     <script>
-      // Animação de entrada ao rolar
       const els = document.querySelectorAll<HTMLElement>('.reveal');
       if ('IntersectionObserver' in window) {
         const io = new IntersectionObserver(
@@ -62,21 +65,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
               }
             }
           },
-          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+          { rootMargin: '0px 0px -6% 0px' },
         );
         els.forEach((el) => io.observe(el));
       } else {
         els.forEach((el) => el.classList.add('visible'));
       }
-
-      // Brilho que acompanha o cursor nos cartões
-      document.querySelectorAll<HTMLElement>('[data-spotlight]').forEach((el) => {
-        el.addEventListener('pointermove', (ev) => {
-          const r = el.getBoundingClientRect();
-          el.style.setProperty('--mx', `${ev.clientX - r.left}px`);
-          el.style.setProperty('--my', `${ev.clientY - r.top}px`);
-        });
-      });
     </script>
   </body>
 </html>

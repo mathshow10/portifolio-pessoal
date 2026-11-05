@@ -1,0 +1,106 @@
+---
+import { formacao, destaques, idiomas } from '../data/perfil';
+---
+
+<section id="formacao" class="section">
+  <div class="container">
+    <header class="section-head reveal">
+      <p class="eyebrow">Formação, destaques e idiomas</p>
+      <h2 class="display">Trajetória</h2>
+    </header>
+
+    <div class="colunas">
+      <div class="cursos reveal">
+        {
+          formacao.map((f) => (
+            <div class="curso">
+              <h3>{f.curso}</h3>
+              <p class="lugar">{f.lugar}</p>
+              <p class="mono periodo">{f.periodo}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="direita reveal">
+        <ul class="lista">
+          {
+            destaques.map((d) => (
+              <li>
+                <span class="mono ano">{d.ano}</span>
+                <span>{d.texto}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <ul class="lista idiomas">
+          {
+            idiomas.map((i) => (
+              <li>
+                <span class="mono ano">{i.nivel}</span>
+                <span>{i.nome}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .colunas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px 64px;
+  }
+  .cursos {
+    display: grid;
+    align-content: start;
+    gap: 32px;
+  }
+  .curso {
+    display: grid;
+    gap: 4px;
+  }
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .lugar {
+    color: var(--muted);
+  }
+  .periodo {
+    color: var(--subtle);
+    font-size: 0.75rem;
+  }
+  .direita {
+    display: grid;
+    align-content: start;
+    gap: 32px;
+  }
+  .lista {
+    display: grid;
+    gap: 14px;
+  }
+  .lista li {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    gap: 16px;
+    align-items: baseline;
+  }
+  .ano {
+    color: var(--accent);
+    font-size: 0.75rem;
+  }
+  .idiomas {
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  @media (max-width: 760px) {
+    .colunas {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
