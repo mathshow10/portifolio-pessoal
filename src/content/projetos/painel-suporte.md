@@ -20,8 +20,8 @@ imagens:
     altura: 245
   - src: projetos/painel-suporte/extensao.png
     legenda: Extensão do Chrome, com as funções do painel no menu do botão direito.
-    largura: 280
-    altura: 243
+    largura: 287
+    altura: 257
   - src: projetos/painel-suporte/resumo.png
     legenda: Ctrl+F8 resume o ticket com a IA e copia o resumo.
     largura: 534
