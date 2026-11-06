@@ -1,11 +1,20 @@
 ---
 import { gerarCV } from '../scripts/cv';
+import { perfil } from '../data/perfil';
 import { url } from '../scripts/url';
 import Icone from './Icone.astro';
 
-const base = new URL(import.meta.env.BASE_URL, Astro.site);
+const base = new URL(import.meta.env.BASE_URL.replace(/\/?$/, '/'), Astro.site);
 const cv = await gerarCV(base);
-const pedido = `Abaixo está o currículo de Matheus Lencione. Leia com atenção. Em seguida vou colar a descrição de uma vaga: diga, de forma honesta e objetiva, onde ele se encaixa, onde ainda falta experiência e que perguntas valeria fazer numa entrevista.\n\n${cv}`;
+const github = perfil.links.find((l) => l.nome === 'GitHub')?.url;
+const gitlab = perfil.links.find((l) => l.nome === 'GitLab')?.url;
+const fontes = [
+  `- Portfólio: ${base.href}`,
+  `- Currículo em texto: ${new URL('cv.md', base).href}`,
+  github && `- GitHub: ${github}`,
+  gitlab && `- GitLab: ${gitlab}`,
+].filter(Boolean).join('\n');
+const pedido = `Estou avaliando ${perfil.nome} para uma vaga. Leia o portfólio e os repositórios dele:\n\n${fontes}\n\nDepois me conte, em poucos parágrafos, quem ele é: o que faz hoje, os principais projetos, as tecnologias que usa e o que se destaca no código dele.\n\nEm seguida vou colar a descrição da vaga. Aí me diga se ele se encaixa, onde ainda falta experiência e que perguntas valeria fazer numa entrevista.`;
 const claude = `https://claude.ai/new?q=${encodeURIComponent(pedido)}`;
 const chatgpt = `https://chatgpt.com/?q=${encodeURIComponent(pedido)}`;
 ---
@@ -15,7 +24,7 @@ const chatgpt = `https://chatgpt.com/?q=${encodeURIComponent(pedido)}`;
     <div class="texto">
       <p class="eyebrow">Para recrutadores</p>
       <h2 class="display">Pergunte a uma IA sobre mim</h2>
-      <p>Abra meu currículo no Claude ou no ChatGPT com um pedido já escrito e depois cole a descrição da vaga para ver se eu combino com ela.</p>
+      <p>Abra o Claude ou o ChatGPT com um pedido pronto: a IA lê meu portfólio e meus repositórios, conta quem eu sou e o que eu faço, e depois você cola a descrição da vaga para ver se eu combino com ela.</p>
       <a class="mono arquivo" href={url('/cv.md')}>/cv.md</a>
     </div>
     <div class="botoes">
