@@ -59,6 +59,11 @@ destaques:                        # só aparecem nos cartões principais
   - Outra coisa importante.
 stack: [Python, FastAPI]
 repositorio: https://gitlab.com/mathshow10/meu-projeto   # GitHub ou GitLab
+imagens:                          # opcional, só nos cartões principais
+  - src: projetos/meu-projeto/tela.png   # arquivo dentro de public/
+    legenda: O que aparece na imagem.
+    largura: 800
+    altura: 450
 ---
 ```
 
