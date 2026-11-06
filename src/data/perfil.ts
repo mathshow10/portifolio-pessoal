@@ -29,7 +29,7 @@ export const perfil = {
   ],
 
   /** Deixe vazio para esconder. */
-  email: '',
+  email: 'matheuslencione@gmail.com',
   links: [
     { nome: 'GitHub', url: 'https://github.com/mathshow10' },
     { nome: 'GitLab', url: 'https://gitlab.com/mathshow10' },
