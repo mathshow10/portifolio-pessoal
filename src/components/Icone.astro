@@ -1,6 +1,6 @@
 ---
 interface Props {
-  nome: 'email' | 'github' | 'gitlab' | 'linkedin' | 'seta' | 'copiar' | 'baixo';
+  nome: 'email' | 'github' | 'gitlab' | 'linkedin' | 'seta' | 'copiar' | 'baixo' | 'pdf';
 }
 const { nome } = Astro.props;
 ---
@@ -12,3 +12,4 @@ const { nome } = Astro.props;
 {nome === 'seta' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg>}
 {nome === 'copiar' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2" /><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1" /></svg>}
 {nome === 'baixo' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7" /></svg>}
+{nome === 'pdf' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" /><path d="M14 3v5h5M9 13h6M9 17h4" /></svg>}
