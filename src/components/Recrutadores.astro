@@ -1,6 +1,7 @@
 ---
 import { gerarCV } from '../scripts/cv';
-import { perfil } from '../data/perfil';
+import { getCollection } from 'astro:content';
+import { perfil, formacao } from '../data/perfil';
 import { url } from '../scripts/url';
 import Icone from './Icone.astro';
 
@@ -8,13 +9,21 @@ const base = new URL(import.meta.env.BASE_URL.replace(/\/?$/, '/'), Astro.site);
 const cv = await gerarCV(base);
 const github = perfil.links.find((l) => l.nome === 'GitHub')?.url;
 const gitlab = perfil.links.find((l) => l.nome === 'GitLab')?.url;
-const fontes = [
-  `- Portfólio: ${base.href}`,
-  `- Currículo em texto: ${new URL('cv.md', base).href}`,
-  github && `- GitHub: ${github}`,
-  gitlab && `- GitLab: ${gitlab}`,
-].filter(Boolean).join('\n');
-const pedido = `Estou avaliando ${perfil.nome} para uma vaga. Leia o portfólio e os repositórios dele:\n\n${fontes}\n\nDepois me conte, em poucos parágrafos, quem ele é: o que faz hoje, os principais projetos, as tecnologias que usa e o que se destaca no código dele.\n\nEm seguida vou colar a descrição da vaga. Aí me diga se ele se encaixa, onde ainda falta experiência e que perguntas valeria fazer numa entrevista.`;
+// Cada projeto entra com o link direto do repositório: páginas de perfil do GitLab
+// carregam por JavaScript e as IAs não conseguem ler a lista de projetos por elas.
+const projetos = (await getCollection('projetos'))
+  .filter((p) => p.data.repositorio)
+  .sort((a, b) => (a.data.categoria === b.data.categoria ? a.data.ordem - b.data.ordem : a.data.categoria === 'principal' ? -1 : 1))
+  .map(({ data: d }) => `- ${d.titulo} (${d.stack.join(', ')}): ${d.repositorio}`)
+  .join('\n');
+const pedido = [
+  `Estou avaliando ${perfil.nome} para uma vaga. Ele é desenvolvedor full stack em início de carreira, com foco em IA e automação: estuda ${formacao[0].curso} na ${formacao[0].lugar} (${formacao[0].periodo}) e hoje trabalha com suporte técnico na ${perfil.empresaAtual}.`,
+  `Leia o portfólio e o currículo dele:\n- Portfólio: ${base.href}\n- Currículo em texto: ${new URL('cv.md', base).href}`,
+  `Abra também os repositórios dos projetos. Alguns estão no GitLab, então use os links diretos:\n${projetos}`,
+  [github && `GitHub: ${github}`, gitlab && `GitLab: ${gitlab}`].filter(Boolean).join(' · '),
+  'Depois me apresente o Matheus em poucos parágrafos: o que ele faz hoje, o que cada projeto mostra sobre ele (cite o repositório), as tecnologias que ele usa na prática e os pontos fortes que você vê no código e na trajetória.',
+  'Em seguida vou colar a descrição da vaga. Compare com o que você leu e me diga, considerando o nível da vaga, onde ele se encaixa, o que ele aprenderia rápido, onde ainda falta experiência e que perguntas valeria fazer numa entrevista.',
+].join('\n\n');
 const claude = `https://claude.ai/new?q=${encodeURIComponent(pedido)}`;
 const chatgpt = `https://chatgpt.com/?q=${encodeURIComponent(pedido)}`;
 ---
