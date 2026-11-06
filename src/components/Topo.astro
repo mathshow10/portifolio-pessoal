@@ -4,6 +4,8 @@ import { url } from '../scripts/url';
 import Icone from './Icone.astro';
 
 const iniciais = perfil.nome.split(' ').map((p) => p[0]).slice(0, 2).join('');
+// No `npm run dev` o PDF ainda não existe (é gerado na publicação), então o botão abre a página /cv.
+const curriculo = import.meta.env.DEV ? url('/cv') : url('/curriculo-matheus-lencione.pdf');
 const icone = (n: string) => n.toLowerCase() as 'github' | 'gitlab' | 'linkedin';
 ---
 
@@ -43,6 +45,7 @@ const icone = (n: string) => n.toLowerCase() as 'github' | 'gitlab' | 'linkedin'
       {perfil.links.map((l) => (
         <a class="btn" href={l.url} target="_blank" rel="noopener"><Icone nome={icone(l.nome)} />{l.nome}</a>
       ))}
+      <a class="btn" href={curriculo} target="_blank" rel="noopener"><Icone nome="pdf" />Currículo em PDF</a>
     </div>
 
     <dl class="fatos">

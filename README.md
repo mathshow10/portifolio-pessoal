@@ -27,7 +27,21 @@ Abra http://localhost:4321/portifolio-pessoal/
 | Projetos | `src/content/projetos/*.md` |
 | Cores e fontes | `src/styles/global.css` (variáveis no topo) |
 
-O currículo em Markdown (`/cv.md`) e o bloco "Para recrutadores" são gerados a partir desses mesmos dados.
+O currículo em Markdown (`/cv.md`), o currículo em PDF e o bloco "Para recrutadores" são gerados a partir desses mesmos dados.
+
+## Currículo em PDF
+
+A página `/cv` é o currículo em formato A4. Na publicação, `npm run pdf` transforma essa página em
+`curriculo-matheus-lencione.pdf`, que é o arquivo aberto pelo botão "Currículo em PDF".
+No `npm run dev` o botão abre a própria página `/cv`, que tem um botão "Salvar como PDF".
+
+Para gerar o PDF no seu computador:
+
+```bash
+npx playwright install chromium   # só na primeira vez
+npm run build
+npm run pdf                        # cria dist/curriculo-matheus-lencione.pdf
+```
 
 ## Adicionando um projeto novo
 
