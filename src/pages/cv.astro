@@ -10,7 +10,7 @@ import { getCollection } from 'astro:content';
 import { perfil, experiencias, habilidades, formacao, destaques, idiomas } from '../data/perfil';
 import { url } from '../scripts/url';
 
-const site = new URL(import.meta.env.BASE_URL, Astro.site);
+const site = new URL(import.meta.env.BASE_URL.replace(/\/?$/, '/'), Astro.site);
 const siteTexto = site.href.replace(/^https?:\/\//, '').replace(/\/$/, '');
 const semProtocolo = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 
