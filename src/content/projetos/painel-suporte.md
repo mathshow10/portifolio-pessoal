@@ -8,8 +8,10 @@ destaques:
   - Expansor global de atalhos para Windows. Digitar ;atalho em qualquer programa abre a lista de respostas, e Enter cola o texto formatado.
   - Com Ctrl+F11, lê a mensagem do jogador e sugere a resposta certa, buscando antes em tickets já resolvidos, sem gastar IA.
   - Melhora rascunhos e resume tickets com a API do Google Gemini. E-mails e números longos são trocados por marcadores antes do envio.
+  - Extensão do Chrome que leva as funções para o menu do botão direito e serve de ponte para ler e colar direto no ticket, sem teclas simuladas (o anti-cheat do jogo bloqueava a colagem automática).
+  - Com Ctrl+F7, monta o reporte de bug para o Discord da equipe, com número do ticket, jogador e mensagem, e a IA resume se precisar.
   - Contador de usos e relatório de buscas sem resultado, para saber qual resposta ainda falta no acervo.
-stack: [Python, Tkinter, Google Gemini, keyboard, pystray]
+stack: [Python, Tkinter, Google Gemini, JavaScript, Extensão do Chrome, keyboard, pystray]
 repositorio: https://github.com/mathshow10/painel-suporte
 imagens:
   - src: projetos/painel-suporte/expansor.png
