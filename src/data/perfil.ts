@@ -12,7 +12,7 @@ export const perfil = {
    * Foto: coloque o arquivo em public/ (ex.: public/foto.jpg) e escreva 'foto.jpg' aqui.
    * Vazio = mostra as iniciais.
    */
-  foto: '',
+  foto: 'foto.jpg',
 
   // Título principal. A segunda parte aparece em itálico, na cor de destaque.
   titulo: 'Do suporte ao código: crio ferramentas que',
