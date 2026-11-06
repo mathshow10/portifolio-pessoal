@@ -3,14 +3,14 @@ titulo: Painel de Suporte
 categoria: principal
 ordem: 1
 contexto: Projeto pessoal · Suporte de jogos
-frase: Um atalho como ;pag vira a resposta pronta em qualquer caixa de texto, e uma IA sugere, melhora e resume respostas de tickets.
+frase: Ferramenta que criei para o meu trabalho de suporte em jogos, para responder tickets mais rápido e com menos erro. Ela guarda as respostas prontas da equipe, acha a certa para cada mensagem do jogador e usa IA só quando precisa, para melhorar texto, resumir ticket e montar o reporte de bug. Roda no Windows e funciona em qualquer programa, inclusive no navegador.
 destaques:
-  - Expansor global de atalhos para Windows. Digitar ;atalho em qualquer programa abre a lista de respostas, e Enter cola o texto formatado.
+  - "Expansor de atalhos: digitar ;pag em qualquer caixa de texto abre a lista de respostas, e Enter cola o texto formatado."
   - Com Ctrl+F11, lê a mensagem do jogador e sugere a resposta certa, buscando antes em tickets já resolvidos, sem gastar IA.
-  - Melhora rascunhos e resume tickets com a API do Google Gemini. E-mails e números longos são trocados por marcadores antes do envio.
-  - Extensão do Chrome que leva as funções para o menu do botão direito e serve de ponte para ler e colar direto no ticket, sem teclas simuladas (o anti-cheat do jogo bloqueava a colagem automática).
-  - Com Ctrl+F7, monta o reporte de bug para o Discord da equipe, com número do ticket, jogador e mensagem, e a IA resume se precisar.
-  - Contador de usos e relatório de buscas sem resultado, para saber qual resposta ainda falta no acervo.
+  - Com a API do Google Gemini, melhora rascunhos (Ctrl+F10) e resume tickets (Ctrl+F8). E-mails e números longos são trocados por marcadores antes do envio.
+  - Extensão do Chrome que leva tudo isso para o menu do botão direito e cola direto no ticket, sem teclas simuladas (o anti-cheat do jogo bloqueava a colagem automática).
+  - Com Ctrl+F7, monta o reporte de bug para o Discord da equipe, com número do ticket, jogador e mensagem.
+  - Ctrl+F9 guarda uma resposta nova no acervo na hora, e o relatório de buscas sem resultado mostra qual resposta ainda falta.
 stack: [Python, Tkinter, Google Gemini, JavaScript, Extensão do Chrome, keyboard, pystray]
 repositorio: https://github.com/mathshow10/painel-suporte
 imagens:
