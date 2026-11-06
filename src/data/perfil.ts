@@ -19,7 +19,7 @@ export const perfil = {
   tituloDestaque: 'tiram o trabalho repetitivo do caminho.',
 
   apresentacao:
-    'Desenvolvedor full stack em formação, com foco em automação e IA. Na DFATO GAMES presto suporte técnico a um jogo online, com manutenção, testes de software e atendimento aos jogadores. Foi dessa rotina que nasceu o Painel de Suporte, uma ferramenta em Python que transforma atalhos em respostas prontas e usa IA para sugerir, melhorar e resumir respostas de tickets. Hoje curso Análise e Desenvolvimento de Sistemas na FEPI, onde já estudei front-end, desenvolvimento mobile com Flutter e estrutura de dados, e agora construo APIs REST em Java com Spring Boot. Antes passei pela Engenharia de Controle e Automação na UNIFEI, onde programei drones na equipe Black Bee Drones.',
+    'Desenvolvedor full stack em formação, com foco em automação e IA. Na DFATO GAMES presto suporte técnico a um jogo online, com manutenção, testes de software e atendimento aos jogadores. Foi dessa rotina que nasceu o Painel de Suporte, uma ferramenta em Python que transforma atalhos em respostas prontas e usa IA para sugerir, melhorar e resumir respostas de tickets. Hoje curso Análise e Desenvolvimento de Sistemas na FEPI. Antes passei pela Engenharia de Controle e Automação na UNIFEI, onde programei drones autônomos para a competição IMAV na equipe Black Bee Drones.',
 
   fatos: [
     { rotulo: 'Agora', valor: 'Suporte técnico na DFATO GAMES' },
@@ -63,16 +63,16 @@ export const experiencias: Experiencia[] = [
     cargo: 'Projetos acadêmicos',
     lugar: 'FEPI',
     descricao:
-      'Ao longo do curso de Análise e Desenvolvimento de Sistemas estudei front-end, desenvolvimento mobile e estrutura de dados. Nas disciplinas construo APIs REST em Java, apps mobile em equipe e páginas responsivas, sempre versionando no Git.',
+      'Nas disciplinas do curso de Análise e Desenvolvimento de Sistemas construo APIs REST em Java, apps mobile em equipe e páginas responsivas, sempre versionando no Git.',
     projetos: ['api-payments', 'consulta-cep', 'laboratorio-front-end'],
   },
   {
     periodo: '2019 – 2020',
     detalhe: 'Projeto de extensão',
-    cargo: 'Programação e automação de drones',
+    cargo: 'Programação de drones autônomos',
     lugar: 'Black Bee Drones · UNIFEI',
     descricao:
-      'Equipe de drones da UNIFEI. Trabalhei com programação e automação de drones, apresentei o projeto na DroneShow, em São Paulo, e dei palestras no SESI, em Florianópolis.',
+      'Equipe de drones autônomos da UNIFEI. Programei drones autônomos para a IMAV (International Micro Air Vehicle Competition), apresentei o projeto na DroneShow, em São Paulo, e dei palestras no SESI, em Florianópolis.',
   },
 ];
 
