@@ -18,6 +18,10 @@ const projetos = defineCollection({
     stack: z.array(z.string()).default([]),
     repositorio: z.string().url().optional(),
     demo: z.string().url().optional(),
+    // Capturas de tela (arquivos em public/). Só aparecem nos cartões principais.
+    imagens: z
+      .array(z.object({ src: z.string(), legenda: z.string(), largura: z.number(), altura: z.number() }))
+      .default([]),
   }),
 });
 

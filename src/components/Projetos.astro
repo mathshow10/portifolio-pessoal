@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Icone from './Icone.astro';
+import { url } from '../scripts/url';
 
 const todos = await getCollection('projetos');
 const ordenar = (a: (typeof todos)[number], b: (typeof todos)[number]) => a.data.ordem - b.data.ordem;
@@ -12,38 +13,51 @@ const origem = (u?: string) => (!u ? '' : u.includes('gitlab.com') ? 'GitLab' : 
 <section id="projetos" class="section">
   <div class="container">
     <header class="section-head reveal">
-      <p class="eyebrow">Projetos</p>
-      <h2 class="display">O que eu construí</h2>
-      <p>Os projetos de que mais me orgulho e o que cada um resolve.</p>
+      <h2 class="display">Projetos</h2>
     </header>
 
     <div class="principais">
       {
-        principais.map((p, i) => (
-          <article class="card reveal" id={`projeto-${p.id}`}>
-            <div class="meta mono">
-              <span class="num">{String(i + 1).padStart(2, '0')}</span>
-              {p.data.contexto && <span>{p.data.contexto}</span>}
-            </div>
-            <h3>{p.data.titulo}</h3>
-            <blockquote>{p.data.frase}</blockquote>
-            {p.data.destaques.length > 0 && (
-              <ul class="topicos">
-                {p.data.destaques.map((d) => <li>{d}</li>)}
-              </ul>
-            )}
-            <div class="rodape">
-              <ul class="chips">
-                {p.data.stack.map((s) => <li class="chip">{s}</li>)}
-              </ul>
-              {p.data.repositorio && (
-                <a class="repo mono" href={p.data.repositorio} target="_blank" rel="noopener">
-                  Ver no {origem(p.data.repositorio)} <Icone nome="seta" />
-                </a>
+        principais.map((p) => {
+          const d = p.data;
+          const topicos = d.destaques.length > 0 && (
+            <ul class="topicos">
+              {d.destaques.map((t) => <li>{t}</li>)}
+            </ul>
+          );
+          return (
+            <article class="card reveal" id={`projeto-${p.id}`}>
+              <div class="info">
+                {d.contexto && <p class="meta mono">{d.contexto}</p>}
+                <h3>{d.titulo}</h3>
+                <p class="frase">{d.frase}</p>
+                <div class="rodape">
+                  <ul class="chips">
+                    {d.stack.map((s) => <li class="chip">{s}</li>)}
+                  </ul>
+                  {d.repositorio && (
+                    <a class="repo mono" href={d.repositorio} target="_blank" rel="noopener">
+                      Ver no {origem(d.repositorio)} <Icone nome="seta" />
+                    </a>
+                  )}
+                </div>
+              </div>
+              <div class="lado">{topicos}</div>
+              {d.imagens.length > 0 && (
+                <div class="telas">
+                  {d.imagens.map((img) => (
+                    <figure>
+                      <a href={url(`/${img.src}`)} target="_blank" rel="noopener">
+                        <img src={url(`/${img.src}`)} alt={img.legenda} width={img.largura} height={img.altura} loading="lazy" decoding="async" />
+                      </a>
+                      <figcaption>{img.legenda}</figcaption>
+                    </figure>
+                  ))}
+                </div>
               )}
-            </div>
-          </article>
-        ))
+            </article>
+          );
+        })
       }
     </div>
 
@@ -51,7 +65,6 @@ const origem = (u?: string) => (!u ? '' : u.includes('gitlab.com') ? 'GitLab' : 
       outros.length > 0 && (
         <div class="outros">
           <header class="sub reveal">
-            <p class="eyebrow">Estudos e laboratórios</p>
             <h3 class="display">Outros projetos</h3>
           </header>
           <div class="grade">
@@ -76,14 +89,13 @@ const origem = (u?: string) => (!u ? '' : u.includes('gitlab.com') ? 'GitLab' : 
 <style>
   .principais {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
   }
   .card {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    padding: 32px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 40px;
+    padding: 36px;
     border: 1px solid var(--line);
     border-radius: var(--radius);
     background: var(--surface);
@@ -92,29 +104,58 @@ const origem = (u?: string) => (!u ? '' : u.includes('gitlab.com') ? 'GitLab' : 
   .card:target {
     border-color: var(--accent);
   }
-  .meta {
+  .info {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     gap: 16px;
+  }
+  .meta {
     color: var(--subtle);
     font-size: 0.75rem;
   }
-  .num {
-    color: var(--accent);
-  }
   h3 {
-    font-size: 1.3125rem;
+    font-size: 1.5rem;
     font-weight: 600;
     letter-spacing: -0.02em;
     line-height: 1.25;
   }
-  blockquote {
-    padding-left: 16px;
-    border-left: 2px solid var(--accent);
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    line-height: 1.4;
-    letter-spacing: -0.005em;
+  .frase {
+    color: var(--ink);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+  }
+  .lado > .topicos {
+    padding-top: 4px;
+  }
+  .telas {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: 16px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  figure {
+    margin: 0;
+  }
+  figure a {
+    display: block;
+    padding: 10px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--bg) 70%, var(--line));
+  }
+  figure img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12), 0 6px 18px rgb(0 0 0 / 0.1);
+  }
+  figcaption {
+    margin-top: 8px;
+    color: var(--subtle);
+    font-size: 0.8125rem;
+    line-height: 1.45;
   }
   .topicos {
     display: grid;
@@ -166,7 +207,7 @@ const origem = (u?: string) => (!u ? '' : u.includes('gitlab.com') ? 'GitLab' : 
   }
 
   .outros {
-    margin-top: 88px;
+    margin-top: 72px;
   }
   .sub {
     display: grid;
@@ -231,7 +272,26 @@ const origem = (u?: string) => (!u ? '' : u.includes('gitlab.com') ? 'GitLab' : 
     font-size: 0.75rem;
   }
   @media (max-width: 860px) {
-    .principais,
+    /* No celular: texto, tópicos, imagens e, por último, tecnologias e link. */
+    .card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .info {
+      display: contents;
+    }
+    .lado {
+      order: 1;
+    }
+    .telas {
+      order: 2;
+      grid-template-columns: 1fr;
+      padding-top: 20px;
+    }
+    .rodape {
+      order: 3;
+    }
     .grade {
       grid-template-columns: 1fr;
     }
@@ -239,10 +299,6 @@ const origem = (u?: string) => (!u ? '' : u.includes('gitlab.com') ? 'GitLab' : 
   @media (max-width: 560px) {
     .card {
       padding: 24px 20px;
-    }
-    .meta {
-      flex-direction: column;
-      gap: 4px;
     }
     .outros {
       margin-top: 64px;

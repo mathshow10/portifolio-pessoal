@@ -8,8 +8,7 @@ const projetos = new Map((await getCollection('projetos')).map((p) => [p.id, p.d
 <section id="experiencia" class="section">
   <div class="container">
     <header class="section-head reveal">
-      <p class="eyebrow">Experiência</p>
-      <h2 class="display">Por onde passei</h2>
+      <h2 class="display">Experiência</h2>
     </header>
 
     <ol class="lista">
@@ -54,6 +53,10 @@ const projetos = new Map((await getCollection('projetos')).map((p) => [p.id, p.d
     gap: 8px 32px;
     padding-block: 32px;
     border-bottom: 1px solid var(--line);
+  }
+  .linha:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
   }
   .quando {
     display: grid;
