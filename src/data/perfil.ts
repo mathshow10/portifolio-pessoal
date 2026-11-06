@@ -19,7 +19,7 @@ export const perfil = {
   tituloDestaque: 'tiram o trabalho repetitivo do caminho.',
 
   apresentacao:
-    'Desenvolvedor full stack em formação, com foco em automação e IA. Na DFATO GAMES presto suporte técnico a um jogo online, com manutenção, testes de software e atendimento aos jogadores. Foi dessa rotina que nasceu o Painel de Suporte, uma ferramenta em Python que transforma atalhos em respostas prontas e usa IA para sugerir, melhorar e resumir respostas de tickets. Hoje curso Análise e Desenvolvimento de Sistemas na FEPI, onde construo APIs em Java com Spring Boot. Antes passei pela Engenharia de Controle e Automação na UNIFEI, onde programei drones na equipe Black Bee Drones.',
+    'Desenvolvedor full stack em formação, com foco em automação e IA. Na DFATO GAMES presto suporte técnico a um jogo online, com manutenção, testes de software e atendimento aos jogadores. Foi dessa rotina que nasceu o Painel de Suporte, uma ferramenta em Python que transforma atalhos em respostas prontas e usa IA para sugerir, melhorar e resumir respostas de tickets. Hoje curso Análise e Desenvolvimento de Sistemas na FEPI, onde já estudei front-end, desenvolvimento mobile com Flutter e estrutura de dados, e agora construo APIs REST em Java com Spring Boot. Antes passei pela Engenharia de Controle e Automação na UNIFEI, onde programei drones na equipe Black Bee Drones.',
 
   fatos: [
     { rotulo: 'Agora', valor: 'Suporte técnico na DFATO GAMES' },
@@ -63,7 +63,7 @@ export const experiencias: Experiencia[] = [
     cargo: 'Projetos acadêmicos',
     lugar: 'FEPI',
     descricao:
-      'Nas disciplinas do curso de Análise e Desenvolvimento de Sistemas construo APIs REST em Java, apps mobile em equipe e páginas responsivas, sempre versionando no Git.',
+      'Ao longo do curso de Análise e Desenvolvimento de Sistemas estudei front-end, desenvolvimento mobile e estrutura de dados. Nas disciplinas construo APIs REST em Java, apps mobile em equipe e páginas responsivas, sempre versionando no Git.',
     projetos: ['api-payments', 'consulta-cep', 'laboratorio-front-end'],
   },
   {
