@@ -36,13 +36,10 @@ const icone = (n: string) => n.toLowerCase() as 'github' | 'gitlab' | 'linkedin'
     <p class="apresentacao">{perfil.apresentacao}</p>
 
     <div class="botoes">
-      {
-        perfil.email ? (
-          <a class="btn primary" href={`mailto:${perfil.email}`}><Icone nome="email" />Enviar e-mail</a>
-        ) : (
-          <a class="btn primary" href="#projetos"><Icone nome="baixo" />Ver projetos</a>
-        )
-      }
+      {perfil.email && (
+        <a class="btn primary" href={`mailto:${perfil.email}`}><Icone nome="email" />Mande um e-mail</a>
+      )}
+      <a class={perfil.email ? 'btn' : 'btn primary'} href="#projetos"><Icone nome="baixo" />Ver projetos</a>
       {perfil.links.map((l) => (
         <a class="btn" href={l.url} target="_blank" rel="noopener"><Icone nome={icone(l.nome)} />{l.nome}</a>
       ))}
