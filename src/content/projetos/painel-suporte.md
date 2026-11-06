@@ -18,10 +18,10 @@ imagens:
     legenda: Digitar ;pa em qualquer caixa de texto abre as respostas que começam assim.
     largura: 550
     altura: 245
-  - src: projetos/painel-suporte/sugestoes.png
-    legenda: Ctrl+F11 sugere a resposta e um ticket parecido já resolvido, sem usar IA.
-    largura: 550
-    altura: 212
+  - src: projetos/painel-suporte/extensao.png
+    legenda: Extensão do Chrome, com as funções do painel no menu do botão direito.
+    largura: 280
+    altura: 243
   - src: projetos/painel-suporte/resumo.png
     legenda: Ctrl+F8 resume o ticket com a IA e copia o resumo.
     largura: 534
