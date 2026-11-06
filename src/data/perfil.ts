@@ -12,24 +12,24 @@ export const perfil = {
    * Foto: coloque o arquivo em public/ (ex.: public/foto.jpg) e escreva 'foto.jpg' aqui.
    * Vazio = mostra as iniciais.
    */
-  foto: '',
+  foto: 'foto.jpg',
 
   // Título principal. A segunda parte aparece em itálico, na cor de destaque.
-  titulo: 'Do suporte ao código: crio ferramentas que',
-  tituloDestaque: 'tiram o trabalho repetitivo do caminho.',
+  titulo: 'Desenvolvedor em formação,',
+  tituloDestaque: 'focado em automação.',
 
   apresentacao:
-    'Desenvolvedor full stack em formação, com foco em automação e IA. Na DFATO GAMES presto suporte técnico a um jogo online, com manutenção, testes de software e atendimento aos jogadores. Foi dessa rotina que nasceu o Painel de Suporte, uma ferramenta em Python que transforma atalhos em respostas prontas e usa IA para sugerir, melhorar e resumir respostas de tickets. Hoje curso Análise e Desenvolvimento de Sistemas na FEPI, onde construo APIs em Java com Spring Boot. Antes passei pela Engenharia de Controle e Automação na UNIFEI, onde programei drones na equipe Black Bee Drones.',
+    'Faço suporte técnico de um jogo online na DFATO GAMES e curso Análise e Desenvolvimento de Sistemas na FEPI. Do dia a dia nos tickets saiu o Painel de Suporte, uma ferramenta em Python que uso para responder mais rápido. Antes, na UNIFEI, participei do projeto de drones autônomos da Black Bee Drones para a competição IMAV.',
 
   fatos: [
     { rotulo: 'Agora', valor: 'Suporte técnico na DFATO GAMES' },
     { rotulo: 'Formação', valor: 'TADS na FEPI · 2025 – 2027' },
     { rotulo: 'Stack principal', valor: 'Python · JavaScript · Java · SQL' },
-    { rotulo: 'Base', valor: 'Itajubá, MG · UTC−3' },
+    { rotulo: 'Base', valor: 'Itajubá, MG' },
   ],
 
   /** Deixe vazio para esconder. */
-  email: '',
+  email: 'matheuslencione@gmail.com',
   links: [
     { nome: 'GitHub', url: 'https://github.com/mathshow10' },
     { nome: 'GitLab', url: 'https://gitlab.com/mathshow10' },
@@ -69,10 +69,10 @@ export const experiencias: Experiencia[] = [
   {
     periodo: '2019 – 2020',
     detalhe: 'Projeto de extensão',
-    cargo: 'Programação e automação de drones',
+    cargo: 'Projeto de drones autônomos',
     lugar: 'Black Bee Drones · UNIFEI',
     descricao:
-      'Equipe de drones da UNIFEI. Trabalhei com programação e automação de drones, apresentei o projeto na DroneShow, em São Paulo, e dei palestras no SESI, em Florianópolis.',
+      'Equipe de drones autônomos da UNIFEI. Participei do projeto de drones autônomos para a IMAV (International Micro Air Vehicle Competition), apresentei o projeto na DroneShow, em São Paulo, e dei palestras no SESI, em Florianópolis.',
   },
 ];
 
@@ -80,8 +80,8 @@ export const habilidades = [
   { area: 'Linguagens', itens: ['Python', 'JavaScript', 'Java', 'SQL', 'HTML', 'CSS', 'Dart'] },
   { area: 'Back-end & dados', itens: ['Spring Boot', 'REST', 'JPA', 'MySQL', 'Flyway', 'Lombok'] },
   { area: 'Front-end & mobile', itens: ['Layout responsivo', 'Flexbox & Grid', 'Astro', 'Flutter'] },
-  { area: 'IA & automação', itens: ['Google Gemini API', 'Claude', 'ChatGPT', 'Automação em Python', 'Excel avançado'] },
-  { area: 'Ferramentas & design', itens: ['Git', 'GitHub', 'GitLab', 'VS Code', 'Figma', 'Photoshop', 'Canva'] },
+  { area: 'IA & automação', itens: ['Integração com a API do Gemini', 'Automação de tarefas em Python', 'Excel avançado'] },
+  { area: 'Ferramentas', itens: ['Git', 'GitHub', 'GitLab', 'VS Code', 'Figma'] },
 ];
 
 export const formacao = [

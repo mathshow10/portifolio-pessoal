@@ -1,25 +1,42 @@
 ---
 import { gerarCV } from '../scripts/cv';
-import { url } from '../scripts/url';
+import { getCollection } from 'astro:content';
+import { perfil, formacao } from '../data/perfil';
 import Icone from './Icone.astro';
 
-const base = new URL(import.meta.env.BASE_URL, Astro.site);
+const base = new URL(import.meta.env.BASE_URL.replace(/\/?$/, '/'), Astro.site);
 const cv = await gerarCV(base);
-const pedido = `Abaixo está o currículo de Matheus Lencione. Leia com atenção. Em seguida vou colar a descrição de uma vaga: diga, de forma honesta e objetiva, onde ele se encaixa, onde ainda falta experiência e que perguntas valeria fazer numa entrevista.\n\n${cv}`;
+const github = perfil.links.find((l) => l.nome === 'GitHub')?.url;
+const gitlab = perfil.links.find((l) => l.nome === 'GitLab')?.url;
+// Cada projeto entra com o link direto do repositório: páginas de perfil do GitLab
+// carregam por JavaScript e as IAs não conseguem ler a lista de projetos por elas.
+const projetos = (await getCollection('projetos'))
+  .filter((p) => p.data.repositorio)
+  .sort((a, b) => (a.data.categoria === b.data.categoria ? a.data.ordem - b.data.ordem : a.data.categoria === 'principal' ? -1 : 1))
+  .map(({ data: d }) => `- ${d.titulo} (${d.stack.join(', ')}): ${d.repositorio}`)
+  .join('\n');
+const pedido = [
+  `Estou avaliando ${perfil.nome} para uma vaga. Ele é desenvolvedor full stack em início de carreira, com foco em IA e automação: estuda ${formacao[0].curso} na ${formacao[0].lugar} (${formacao[0].periodo}) e hoje trabalha com suporte técnico na ${perfil.empresaAtual}.`,
+  `Leia o portfólio e o currículo dele:\n- Portfólio: ${base.href}\n- Currículo em texto: ${new URL('cv.md', base).href}`,
+  `Abra também os repositórios dos projetos. Alguns estão no GitLab, então use os links diretos:\n${projetos}`,
+  [github && `GitHub: ${github}`, gitlab && `GitLab: ${gitlab}`].filter(Boolean).join(' · '),
+  'Depois me apresente o Matheus em poucos parágrafos: o que ele faz hoje, o que cada projeto mostra sobre ele (cite o repositório), as tecnologias que ele usa na prática e os pontos fortes que você vê no código e na trajetória.',
+  'Em seguida vou colar a descrição da vaga. Compare com o que você leu e me diga, considerando o nível da vaga, onde ele se encaixa, o que ele aprenderia rápido, onde ainda falta experiência e que perguntas valeria fazer numa entrevista.',
+].join('\n\n');
 const claude = `https://claude.ai/new?q=${encodeURIComponent(pedido)}`;
 const chatgpt = `https://chatgpt.com/?q=${encodeURIComponent(pedido)}`;
 ---
 
-<section class="container recrutadores">
+<section class="section recrutadores">
+  <div class="container">
   <div class="caixa">
     <div class="texto">
       <p class="eyebrow">Para recrutadores</p>
-      <h2 class="display">Pergunte a uma IA sobre mim</h2>
-      <p>Abra meu currículo no Claude ou no ChatGPT com um pedido já escrito e depois cole a descrição da vaga para ver se eu combino com ela.</p>
-      <a class="mono arquivo" href={url('/cv.md')}>/cv.md</a>
+      <h2>Pergunte a uma IA sobre mim</h2>
+      <p>Abra o Claude ou o ChatGPT com um pedido pronto: a IA lê meu portfólio e meus repositórios, conta quem eu sou e o que eu faço, e depois você cola a descrição da vaga para ver se eu combino com ela.</p>
     </div>
     <div class="botoes">
-      <button class="btn primary" type="button" data-copiar-cv>
+      <button class="btn" type="button" data-copiar-cv>
         <Icone nome="copiar" /><span data-rotulo>Copiar em Markdown</span>
       </button>
       <a class="btn" href={claude} target="_blank" rel="noopener">Perguntar ao Claude <Icone nome="seta" /></a>
@@ -27,46 +44,31 @@ const chatgpt = `https://chatgpt.com/?q=${encodeURIComponent(pedido)}`;
     </div>
     <script type="text/markdown" id="cv-md" set:html={cv.replace(/</g, '\\u003c')} />
   </div>
+  </div>
 </section>
 
 <style>
-  .recrutadores {
-    padding-bottom: 104px;
-    border-bottom: 1px solid var(--line);
-  }
-  @media (max-width: 640px) {
-    .recrutadores {
-      padding-bottom: 72px;
-    }
-  }
   .caixa {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     gap: 32px 48px;
     padding: 36px;
-    border: 1px dashed var(--line-strong);
+    border: 1px solid var(--line);
     border-radius: var(--radius);
-    background: color-mix(in srgb, var(--surface) 55%, transparent);
   }
   .texto {
     display: grid;
     gap: 10px;
   }
   h2 {
-    font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
   }
   .texto p:not(.eyebrow) {
     max-width: 58ch;
     color: var(--muted);
-  }
-  .arquivo {
-    width: fit-content;
-    color: var(--subtle);
-    font-size: 0.75rem;
-  }
-  .arquivo:hover {
-    color: var(--ink);
   }
   .botoes {
     display: grid;

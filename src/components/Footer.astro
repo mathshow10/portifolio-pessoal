@@ -2,15 +2,18 @@
 import { perfil } from '../data/perfil';
 import { url } from '../scripts/url';
 const ano = new Date().getFullYear();
+const curriculo = import.meta.env.DEV ? url('/cv') : url('/curriculo-matheus-lencione.pdf');
 ---
 
 <footer class="footer">
   <div class="container linha">
     <p>© {ano} {perfil.nome} · Feito com Astro e publicado no GitHub Pages.</p>
-    <p class="mono maquina">
-      <span>Versão para IA</span>
-      <a href={url('/cv.md')}>cv.md</a>
-    </p>
+    <nav aria-label="Rodapé">
+      <ul>
+        <li><a href={curriculo} target="_blank" rel="noopener">Currículo em PDF</a></li>
+        <li><a href="#" class="topo">Voltar ao topo <span aria-hidden="true">↑</span></a></li>
+      </ul>
+    </nav>
   </div>
 </footer>
 
@@ -25,21 +28,26 @@ const ano = new Date().getFullYear();
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 8px 24px;
+    align-items: center;
+    gap: 12px 24px;
   }
-  .maquina {
+  ul {
     display: flex;
-    gap: 12px;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    flex-wrap: wrap;
+    gap: 6px 20px;
   }
-  .maquina a {
+  a {
     color: var(--muted);
-    text-transform: none;
-    letter-spacing: 0;
+    transition: color 0.2s;
   }
-  .maquina a:hover {
+  a:hover {
     color: var(--ink);
+  }
+  .topo span {
+    display: inline-block;
+    transition: transform 0.3s var(--ease);
+  }
+  .topo:hover span {
+    transform: translateY(-2px);
   }
 </style>
